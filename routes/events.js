@@ -1,4 +1,8 @@
-var mongo = require('mongodb');
+var mongo = require('mongodb'),
+    url = require('url'),
+    request = require('request'),
+    parseString = require('xml2js').parseString,
+    schedule = require('node-schedule');
 
 var Server = mongo.Server,
     Db = mongo.Db,
@@ -11,7 +15,7 @@ db.open(function(err, db) {
   console.log('opening db');
     if(!err) {
         console.log("Connected to 'eventsdb' database");
-        db.createCollection('events', {strict:true}, function(err, collection) {
+        db.collection('events', {strict:true}, function(err, collection) {
             if (err) {
                 console.log('The events collection doesn’t exist. Creating it with sample data…');
                   fetchData();
@@ -29,12 +33,8 @@ fetchData = function(){
   request(myURL, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       parseString(body.toString(), function (err, result) {
-
         //Store the data in mongo
-        console.log('about to insert into mongo');
-        console.log( JSON.stringify(result.rss.channel) );
-        updateData( result.rss.channel );
-
+        updateData( JSON.parse( JSON.stringify( result.rss.channel[0].item ) ) );
       });
     } else {
       console.log('Error in grabbing calendar data');
@@ -47,18 +47,21 @@ fetchData = function(){
 }
 
 updateData = function(data) {
-  console.log('update data called');
   db.collection('events', function(err, collection) {
 
-    collection.insert( { test: 'trolololo'}, function(err,records){console.log("wow!")});
+    collection.drop(); //TODO: Replace data more reliably
 
+    collection.insert( data, function(err,records){
+      if (err) throw err;
   });
+});
 };
 
-//Grab data every 15 seconds TODO: Make this a reasonable interval after testing
-//schedule.scheduleJob('*/5 * * * *', function(){
-//  fetchData();
-//});
+fetchData();
+
+schedule.scheduleJob('*/5 * * * *', function(){
+ fetchData();
+});
 
 //TODO
 exports.findRange = function(req, res) {
@@ -75,7 +78,6 @@ exports.findRange = function(req, res) {
 exports.findAll = function(req, res) {
     db.collection('events', function(err, collection) {
         collection.find().toArray(function(err, items) {
-            console.log('im trying!');
             res.send(items);
         });
     });

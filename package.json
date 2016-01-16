@@ -1,9 +1,12 @@
 {
-    "name": "wine-cellar",
-    "description": "Wine Cellar Application",
-    "version": "0.0.1",
-    "private": true,
-    "dependencies": {
-        "express": "3.x"
-    }
+  "name": "wine-cellar",
+  "description": "Wine Cellar Application",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "^3.21.2",
+    "mongodb": "~1.4.31",
+    "node-schedule": "^0.6.0",
+    "xml2js": "^0.4.16"
+  }
 }
