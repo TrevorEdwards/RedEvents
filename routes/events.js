@@ -34,7 +34,8 @@ fetchData = function(){
     if (!error && response.statusCode == 200) {
       parseString(body.toString(), function (err, result) {
         //Store the data in mongo
-        updateData( JSON.parse( JSON.stringify( result.rss.channel[0].item ) ) );
+        updateData( formatData( result.rss.channel[0].item ) );
+
       });
     } else {
       console.log('Error in grabbing calendar data');
@@ -44,6 +45,30 @@ fetchData = function(){
       }
     }
   });
+}
+
+formatData = function(data) {
+  var obj = JSON.parse( JSON.stringify( data ) );
+  console.log(obj);
+  for (var i = 0; i < obj.length; i++){
+      var event = obj[i];
+      if (event.title != undefined){
+        var tempTitle = event.title.toString();
+        var dateEndIndex = tempTitle.indexOf(":");
+        event.readableDate = tempTitle.substring(0,dateEndIndex);
+        event.title = tempTitle.substring(dateEndIndex+1).trim();
+        event.uniDate = Date.parse( event['dc:date'].toString() );
+        event.description = event.description.toString();
+        event.link = event.link.toString();
+        event["media:content"] = event["media:content"][0]['$'].url.toString();
+
+        delete event.guid;
+        delete event['pubDate'];
+        delete event['dc:date'];
+    }
+  }
+  return obj;
+
 }
 
 updateData = function(data) {

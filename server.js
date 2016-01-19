@@ -14,6 +14,6 @@ app.listen(3000);
 console.log('Listening on port 3000...');
 
 //DEBUG
-process.on('uncaughtException', function (err) {
-    console.log(err);
-});
+// process.on('uncaughtException', function (err) {
+//     console.log(err);
+// });
