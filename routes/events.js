@@ -76,9 +76,11 @@ updateData = function(data) {
 
     collection.drop(); //TODO: Replace data more reliably
 
-    collection.insert( data, function(err,records){
-      if (err) throw err;
-  });
+    for( var i = 0; i < data.length; i++ ) {
+      collection.insert( data[i], function(err,records){
+        if (err) throw err;
+    });
+    }
 });
 };
 
@@ -88,18 +90,20 @@ schedule.scheduleJob('*/5 * * * *', function(){
  fetchData();
 });
 
-//TODO
+// TODO Find all Unix dates less than or equal to the provided end parameter
 exports.findRange = function(req, res) {
-    var id = req.params.id;
-    console.log('Retrieving events in range: ' + id);
+    var end = req.params.end;
+
+    console.log(end);
+
     db.collection('events', function(err, collection) {
-        collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, item) {
-            res.send(item);
+        collection.find( { 'uniDate': { $lte: end } }).toArray( function(err, items) {
+            res.send(items);
         });
     });
 };
 
-//TODO
+
 exports.findAll = function(req, res) {
     db.collection('events', function(err, collection) {
         collection.find().toArray(function(err, items) {

@@ -7,7 +7,7 @@ app.use(express.logger('dev'));
 app.use(express.bodyParser());
 
 app.get('/events', events.findAll);
-app.get('/events/:start:end', events.findRange);
+app.get('/events/:end', events.findRange);
 
 
 app.listen(3000);
