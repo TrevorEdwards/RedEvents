@@ -5,8 +5,7 @@ var mongo = require('mongodb'),
     schedule = require('node-schedule');
 
 var Server = mongo.Server,
-    Db = mongo.Db,
-    BSON = mongo.BSONPure;
+    Db = mongo.Db;
 
 var server = new Server('localhost', 27017, {auto_reconnect: true});
 db = new Db('eventsdb', server);
@@ -17,7 +16,7 @@ db.open(function(err, db) {
         console.log("Connected to 'eventsdb' database");
         db.collection('events', {strict:true}, function(err, collection) {
             if (err) {
-                console.log('The events collection doesn’t exist. Creating it with sample data…');
+                console.log('The events collection doesn’t exist. Popuating now...');
                   fetchData();
               }
         });
@@ -83,8 +82,6 @@ updateData = function(data) {
     }
 });
 };
-
-fetchData();
 
 schedule.scheduleJob('*/5 * * * *', function(){
  fetchData();
