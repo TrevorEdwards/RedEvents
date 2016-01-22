@@ -1,3 +1,10 @@
+var server_port = process.env.OPENSHIFT_NODEJS_PORT || 8080
+var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
+
+// server.listen(server_port, server_ip_address, function(){
+//   console.log("Listening on " + server_ip_address + ", server_port " + server_port)
+// });
+
 var express = require('express'),
     events = require('./routes/events');
 
@@ -10,8 +17,8 @@ app.get('/events', events.findAll);
 app.get('/events/:end', events.findRange);
 
 
-app.listen(3000);
-console.log('Listening on port 3000...');
+app.listen(server_port);
+console.log('Listening on port ' + server_port);
 
 //DEBUG
 // process.on('uncaughtException', function (err) {

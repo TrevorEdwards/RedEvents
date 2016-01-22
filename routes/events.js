@@ -48,7 +48,6 @@ fetchData = function(){
 
 formatData = function(data) {
   var obj = JSON.parse( JSON.stringify( data ) );
-  console.log(obj);
   for (var i = 0; i < obj.length; i++){
       var event = obj[i];
       if (event.title != undefined){
@@ -59,6 +58,8 @@ formatData = function(data) {
         event.uniDate = Date.parse( event['dc:date'].toString() );
         event.description = event.description.toString();
         event.link = event.link.toString();
+        if( event['geo:lat']) event['geo:lat'] = event['geo:lat'].toString();
+        if( event['geo:long']) event['geo:long'] = event['geo:long'].toString();
         event["media:content"] = event["media:content"][0]['$'].url.toString();
 
         delete event.guid;
@@ -83,18 +84,19 @@ updateData = function(data) {
 });
 };
 
-schedule.scheduleJob('*/5 * * * *', function(){
+//Fetch data every 30 minutes
+schedule.scheduleJob('*/30 * * * *', function(){
  fetchData();
 });
 
-// TODO Find all Unix dates less than or equal to the provided end parameter
 exports.findRange = function(req, res) {
-    var end = req.params.end;
 
-    console.log(end);
+    var end = Number( req.params.end );
 
     db.collection('events', function(err, collection) {
-        collection.find( { 'uniDate': { $lte: end } }).toArray( function(err, items) {
+        // collection.find( { 'uniDate': { $lte: end } }).toArray( function(err, items) {
+        collection.find( { uniDate: { $lte: end } }).toArray( function(err, items) {
+            console.log(items);
             res.send(items);
         });
     });
