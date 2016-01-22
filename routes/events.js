@@ -7,13 +7,22 @@ var mongo = require('mongodb'),
 var Server = mongo.Server,
     Db = mongo.Db;
 
-var server = new Server('localhost', 27017, {auto_reconnect: true});
-db = new Db('eventsdb', server);
+var MONGO_HOST = process.env.OPENSHIFT_MONGODB_DB_HOST || 'localhost';
+var MONGO_PORT = process.env.OPENSHIFT_MONGODB_DB_PORT || 27017;
+
+var server = new Server(MONGO_HOST, MONGO_PORT, {auto_reconnect: true});
+db = new Db('redevents', server);
 
 db.open(function(err, db) {
   console.log('opening db');
     if(!err) {
-        console.log("Connected to 'eventsdb' database");
+        console.log("Connected to 'RedEvents' database.  Authenticating...");
+        if (MONGO_HOST != 'localhost'){
+          db.authenticate("admin", "Z2DJRT81KAJZ", function(err, res){
+            if (err) throw err;
+            console.log('Authenticated!');
+          });
+        }
         db.collection('events', {strict:true}, function(err, collection) {
             if (err) {
                 console.log('The events collection doesn’t exist. Popuating now...');
