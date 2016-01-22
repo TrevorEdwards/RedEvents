@@ -17,8 +17,8 @@ app.get('/events', events.findAll);
 app.get('/events/:end', events.findRange);
 
 
-app.listen(server_port);
-console.log('Listening on port ' + server_port);
+app.listen(server_port, server_ip_address);
+console.log('Listening on port ' + server_port + ":" + server_ip_address);
 
 //DEBUG
 // process.on('uncaughtException', function (err) {
