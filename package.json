@@ -23,7 +23,7 @@
   },
   "private": true,
   "dependencies": {
-    "express": "^3.21.2",
+    "express": "^4.8.0",
     "mongodb": "~1.4.31",
     "node-schedule": "^0.6.0",
     "request": "^2.67.0",

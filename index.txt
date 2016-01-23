@@ -1,0 +1,8 @@
+This is the RedEvents API.
+
+Currently you can make the following queries by appending to the url:
+
+/events - Get all of the events that Cornell currently lists
+
+/events/:endTime - Get events up to [endTime].  Useful when you don't really want
+every event for the next five months.  endTime should be a UNIX timestamp.
