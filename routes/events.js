@@ -104,7 +104,21 @@ exports.findRange = function(req, res) {
 
     db.collection('events', function(err, collection) {
         // collection.find( { 'uniDate': { $lte: end } }).toArray( function(err, items) {
-        collection.find( { uniDate: { $lte: end } }).toArray( function(err, items) {
+        collection.find( { uniDate: { $lt: end } }).toArray( function(err, items) {
+            console.log(items);
+            res.send(items);
+        });
+    });
+};
+
+exports.findRangeExclusive = function(req, res) {
+
+    var begin = Number( req.params.begin );
+    var end = Number( req.params.end );
+
+    db.collection('events', function(err, collection) {
+        // collection.find( { 'uniDate': { $lte: end } }).toArray( function(err, items) {
+        collection.find( { uniDate: { $lt: end, $gte: begin } }).toArray( function(err, items) {
             console.log(items);
             res.send(items);
         });
