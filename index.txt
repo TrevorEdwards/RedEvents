@@ -8,3 +8,5 @@ Currently you can make the following queries by appending to the url:
 every event for the next five months.  endTime should be a UNIX timestamp.
 
 /events/:beginTime/:endTime - Get events in the range [beginTime,endTime).
+
+/contacts - Get a list of emergency contact information (last updated December 2015)

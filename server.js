@@ -1,5 +1,6 @@
 var express = require('express'),
     events = require('./routes/events'),
+    contacts = require('./routes/contacts'),
     app = express(),
     http = require('http');
 
@@ -21,6 +22,7 @@ app.get('/', createIndex); //Index
 app.get('/events', events.findAll);
 app.get('/events/:end', events.findRange);
 app.get('/events/:begin/:end', events.findRangeExclusive);
+app.get('/contacts', contacts.findAll);
 
 http.createServer(app).listen(app.get('port') ,app.get('ip'), function () {
     console.log("RedEvents server listening at %s:%d ", app.get('ip'),app.get('port'));
