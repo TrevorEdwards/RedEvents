@@ -10,3 +10,5 @@ every event for the next five months.  endTime should be a UNIX timestamp.
 /events/:beginTime/:endTime - Get events in the range [beginTime,endTime).
 
 /contacts - Get a list of emergency contact information (last updated December 2015)
+
+/libraries - Get today's hours for all of Cornell's libraries

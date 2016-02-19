@@ -26,6 +26,7 @@
     "express": "^4.8.0",
     "mongodb": "~1.4.31",
     "node-schedule": "^0.6.0",
+    "plant.js": "git+https://github.com/mrkev/plant.js.git",
     "request": "^2.67.0",
     "xml2js": "^0.4.16"
   },
