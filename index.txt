@@ -12,3 +12,6 @@ every event for the next five months.  endTime should be a UNIX timestamp.
 /contacts - Get a list of emergency contact information (last updated December 2015)
 
 /libraries - Get today's hours for all of Cornell's libraries
+
+
+Want to contribute? https://github.com/TrevorEdwards/RedEvents
