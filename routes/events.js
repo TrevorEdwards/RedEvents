@@ -8,7 +8,7 @@ var mongo = require('mongodb'),
 
 //Scrape calendar xml, convert to json
 fetchData = function(){
-  console.log('Fetching data at ' + Date.now());
+  console.log('Fetching events at ' + Date.now());
   var myURL = url.format('http://events.cornell.edu/calendar.xml');
   request(myURL, function (error, response, body) {
     if (!error && response.statusCode == 200) {
@@ -65,10 +65,14 @@ updateData = function(data) {
 });
 };
 
-//Fetch data every 30 minutes
-schedule.scheduleJob('*/30 * * * *', function(){
+var rule = new schedule.RecurrenceRule();
+rule.second = 59; //check events every 59 seconds
+schedule.scheduleJob(rule, function(){
  fetchData();
 });
+
+//initialization
+fetchData();
 
 exports.findRange = function(req, res) {
 

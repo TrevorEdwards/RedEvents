@@ -62,10 +62,17 @@ var parseLibraries = function(){
     });
 }
 
-//every day at 12:01 AM
-schedule.scheduleJob('0 1 0 * * *', function(){
-  parseLibraries();
+
+//Above seems to not be working :/
+//45 second consistency
+var rule = new schedule.RecurrenceRule();
+rule.second = 45;
+schedule.scheduleJob(rule, function(){
+ parseLibraries();
 });
+
+//initialization
+parseLibraries();
 
 //exports
 exports.findAll = function(req, res) {
