@@ -13,5 +13,19 @@ every event for the next five months.  endTime should be a UNIX timestamp.
 
 /libraries - Get today's hours for all of Cornell's libraries
 
+/maps/bikeracks - bikerack locations
+
+/maps/bluelight - bluelight locations
+
+/maps/buildings - building locations
+
+/maps/stops - tcat stop locations
+
+
+While we try our best to make this data accurate, we cannot guarantee the accuracy of any of the data
+for any purpose.  See the license on github.
+
+Map data comes from the Cornell Open Data Initiative.  See https://github.com/cornell-data
+
 
 Want to contribute? https://github.com/TrevorEdwards/RedEvents

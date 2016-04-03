@@ -2,8 +2,11 @@ var Plant = require('plant.js'),
     schedule = require('node-schedule'),
     sdb = require('./shareddb');
 
+var lastUpdated = 0;
+
 var parseLibraries = function(){
   console.log('parsing libraries at ' + Date.now());
+  lastUpdated = Date.now();
   var browser = new Plant();
 
   browser.get('https://www.library.cornell.edu/libraries')
@@ -53,7 +56,7 @@ var parseLibraries = function(){
             for( var i = 0; i < lib_stats.length; i++ ) {
               collection.insert( lib_stats[i], function(err,records){
                 if (err) throw err;
-            });
+              });
             }
         });
     })
@@ -78,7 +81,8 @@ parseLibraries();
 exports.findAll = function(req, res) {
     sdb.db.collection('libraries', function(err, collection) {
         collection.find().toArray(function(err, items) {
-            res.send(items);
+            res.send({"lastUpdated": lastUpdated,
+                      "hours": items});
         });
     });
 };
