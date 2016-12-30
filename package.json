@@ -23,7 +23,7 @@
   },
   "private": true,
   "dependencies": {
-    "express": "^4.8.0",
+    "express": "^4.14.0",
     "mongodb": "~1.4.31",
     "node-schedule": "^0.6.0",
     "plant.js": "git+https://github.com/mrkev/plant.js.git",
