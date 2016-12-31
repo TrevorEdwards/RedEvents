@@ -1,5 +1,12 @@
-var CONTACTS_PATH = __dirname + "/static_data/emergencycontacts.json";
+"use strict";
+let path = require('path');
+let express = require('express');
+let router = express.Router();
 
-exports.findAll = function(req, res) {
-  res.sendFile( CONTACTS_PATH );
-}
+const CONTACTS_PATH = path.join(__dirname + "/../data/emergencycontacts.json");
+
+router.get('/', function(req, res) {
+    res.sendFile( CONTACTS_PATH );
+});
+
+module.exports = router;

@@ -1,88 +1,88 @@
-var Plant = require('plant.js'),
-    schedule = require('node-schedule'),
-    sdb = require('./shareddb');
+"use strict";
+let Plant = require('plant.js');
+let schedule = require('node-schedule');
+let async = require('async');
+let express = require('express');
+let router = express.Router();
 
-var lastUpdated = 0;
+let Library = require('../models/library');
 
-var parseLibraries = function(){
-  console.log('parsing libraries at ' + Date.now());
-  lastUpdated = Date.now();
-  var browser = new Plant();
-
-  browser.get('https://www.library.cornell.edu/libraries')
-    .then(function($){
-        var result = $('.today-hours , .library-info h2');
-        var lib = null;
-        var lib_stats = [];
-        for( var i = 0; i < result.length; i++){
-          try{
-            if(result[i].children[0].data != undefined){
-              if(lib == null)
-                lib = result[i].children[0].data;
-              else{
-                lib_stats.push( {name: lib, hours: result[i].children[0].data})
-                lib = null;
-              }
-            }
-          } catch(e){
-            // do nothing
-          }
-          try{
-            if(result[i].children[1].data != undefined){
-              if(lib == null){
-                lib = result[i].children[1].data;
-              }
-              else{
-                lib_stats.push( {name: lib.trim(), hours: result[i].children[1].data.trim()});
-                lib = null;
-              }
-            }
-          }
-
-           catch(e){
-            //do nothing dog
-          }
+// Routes
+router.get('/', function _findAll(req, res) {
+    Library.find({}, function(err, hours) {
+        if (err) {
+            console.error(err);
+            return res.status(500).send(err);
         }
 
-        for(var i = 0; i < lib_stats.length; i++){
-            var dat = lib_stats[i];
-          }
-
-        //Insert into the database
-          sdb.db.collection('libraries', function(err, collection) {
-            if( collection != undefined){
-                collection.drop(); //TODO: Replace data more reliably
-            }
-            for( var i = 0; i < lib_stats.length; i++ ) {
-              collection.insert( lib_stats[i], function(err,records){
-                if (err) throw err;
-              });
-            }
+        return res.status(200).send({
+            lastUpdated: lastUpdated,
+            hours: hours
         });
-    })
-    .catch(function(e){
-      return console.trace(e);
     });
-}
-
-
-//Above seems to not be working :/
-//45 second consistency
-var rule = new schedule.RecurrenceRule();
-rule.second = 45;
-schedule.scheduleJob(rule, function(){
- parseLibraries();
 });
 
-//initialization
+// Data Scraping
+
+let lastUpdated = 0;
+
+function parseLibraries(){
+    console.log('parsing libraries at ' + Date.now());
+    lastUpdated = Date.now();
+    let browser = new Plant();
+
+    browser.get('https://www.library.cornell.edu/libraries')
+        .then(function($){
+            let result = $('.today-hours , .library-info h2');
+            let lib = null;
+            let lib_stats = [];
+            for( let i = 0; i < result.length; i++){
+                try{
+                    if(result[i].children[0].data != undefined){
+                        if(lib == null)
+                            lib = result[i].children[0].data;
+                        else{
+                            lib_stats.push( {name: lib, hours: result[i].children[0].data})
+                            lib = null;
+                        }
+                    }
+                    if(result[i].children[1].data != undefined){
+                        if(lib == null){
+                            lib = result[i].children[1].data;
+                        }
+                        else{
+                            lib_stats.push( {name: lib.trim(), hours: result[i].children[1].data.trim()});
+                            lib = null;
+                        }
+                    }
+                }
+                catch(e){
+                    //do nothing
+                }
+            }
+
+            //Insert into the database
+            Library.remove({}, function(err) {
+                async.each(lib_stats, function (lib,cb) {
+                    new Library(lib).save(cb);
+                }, function(err) {
+                    if (err) console.error(err);
+                });
+            });
+        })
+        .catch(function(e){
+            return console.trace(e);
+        });
+}
+
+// 45 second consistency
+let rule = new schedule.RecurrenceRule();
+rule.second = 45;
+schedule.scheduleJob(rule, function(){
+    parseLibraries();
+});
+
+// Initialize
 parseLibraries();
 
-//exports
-exports.findAll = function(req, res) {
-    sdb.db.collection('libraries', function(err, collection) {
-        collection.find().toArray(function(err, items) {
-            res.send({"lastUpdated": lastUpdated,
-                      "hours": items});
-        });
-    });
-};
+module.exports = router;
