@@ -1,0 +1,31 @@
+This is the RedEvents API.
+
+Currently you can make the following queries by appending to the url:
+
+/events - Get all of the events that Cornell currently lists
+
+/events/:endTime - Get events from now up to (endTime) (not including endTime).  Useful when you don't really want
+every event for the next five months.  endTime should be a UNIX timestamp.
+
+/events/:beginTime/:endTime - Get events in the range [beginTime,endTime).
+
+/contacts - Get a list of emergency contact information (last updated December 2015)
+
+/libraries - Get today's hours for all of Cornell's libraries
+
+/maps/bikeracks - bikerack locations
+
+/maps/bluelight - bluelight locations
+
+/maps/buildings - building locations
+
+/maps/stops - tcat stop locations
+
+
+While we try our best to make this data accurate, we cannot guarantee the accuracy of any of the data
+for any purpose.  See the license on github.
+
+Map data comes from the Cornell Open Data Initiative.  See https://github.com/cornell-data
+
+
+Want to contribute? https://github.com/TrevorEdwards/RedEvents
