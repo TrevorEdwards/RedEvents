@@ -1,0 +1,27 @@
+[
+	{ 
+	  "name": "Cornell University Police",
+	  "number": "6072551111",
+	  "description": "Emergency response, ambulance, reporting suspicious activities and crimes" 
+	  },
+	{ 
+	  "name": "Gannett Health Services",
+	  "number": "6072555155",
+	  "description": "Medical and mental health care, consultation, coordination with hospital and other local services" 
+	  },
+	{ 
+	  "name": "Faculty and Staff Assistance Program",
+	  "number": "6072552673" ,
+	  "description": "Consultation and support around work and life issues, referral to local providers" 
+	  },
+	{ 
+	  "name": "The Advocacy Center",
+	  "number": "6072775000", 
+	  "description": "Ithaca's sexual and relationship violence hotline, immediate support" 
+	  },
+	{ 
+	  "name": "Crisisline",
+	  "number": "6072721616", 
+	  "description": "Ithaca's suicide prevention services, crisis counseling" 
+	  }
+]
