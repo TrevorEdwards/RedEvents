@@ -18,7 +18,7 @@ router.get('/:end', function _findRange(req, res) {
         return res.status(500);
     }
 
-    Event.find({startTime : {$lt : end}}, function (err, events) {
+    Event.find({startTime : {$lt : end}}).sort({'startTime':'asc'}).exec(function (err, events) {
         if (err) {
             console.error(err);
             return res.status(500).send(err);
@@ -37,7 +37,7 @@ router.get('/:begin/:end', function _findRangeExclusive(req, res) {
         return res.status(500);
     }
 
-    Event.find({startTime : { $lt: end, $gte: begin }}, function (err, events) {
+    Event.find({startTime : { $lt: end, $gte: begin }}).sort({'startTime':'asc'}).exec(function (err, events) {
         if (err) {
             console.error(err);
             return res.status(500).send(err);
@@ -48,7 +48,7 @@ router.get('/:begin/:end', function _findRangeExclusive(req, res) {
 });
 
 router.get('/', function _findAll(req, res) {
-    Event.find({}, function (err, events) {
+    Event.find({}).sort({'startTime':'asc'}).exec( function (err, events) {
         if (err) {
             console.error(err);
             return res.status(500).send(err);
