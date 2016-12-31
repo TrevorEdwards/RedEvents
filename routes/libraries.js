@@ -75,9 +75,9 @@ function parseLibraries(){
         });
 }
 
-// 45 second consistency
+// 5 minute consistency
 let rule = new schedule.RecurrenceRule();
-rule.second = 45;
+rule.minute = 5;
 schedule.scheduleJob(rule, function(){
     parseLibraries();
 });
