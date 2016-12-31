@@ -1,22 +1,14 @@
 # RedEvents
 
-RedEvents is a NodeJS API for those who wish to develop informational services for Cornell students.
+RedEvents is a NodeJS API for those who wish to develop informational services (apps, etc) for Cornell students.
 
-See it running [here](http://redevents-trevtrev.rhcloud.com/).
+See it running [here](https://redevents.herokuapp.com/).
 
 # Structure
-The api divides its services into different routes.
+The app is set up as a standard express app with a mongoose wrapper over mongo.
 
-The routes have a few different functions:
-
-  contacts.js simply serves a contacts file that is hosted on the server
-
-  events.js parses XML from Cornell's events data, converts it to JSON, and stores it in the database.
-
-  libraries.js parses Cornell's library hours web page and stores the results in the database.
-
-
-Database access is handled in shareddb.js.
+All data scraping/routes are within the routes folder. New functionality can be put into its own file. For example,
+library data scraping and routes are within routes/libraries.js.
 
 # Contributing
 
